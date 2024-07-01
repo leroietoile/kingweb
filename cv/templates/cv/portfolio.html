@@ -64,11 +64,15 @@
     {% endif %}
 
     <p id="first-parag" class="slide_from_top">{{ current_portfolio.paragraph1 }}</p>
-
+    
     <div class="second-parag-container slide_from_bottom" style="background: url({% static 'cv/images/triangle1white.svg' %}) no-repeat center top/100%, url({% static 'cv/images/triangle2white.svg' %}) no-repeat center bottom/100%, #591C21;">
-        <p>{{ current_portfolio.paragraph2 }}</p>
-    </div>
 
+      <div class="bug_line_cover top_bug_line_cover"></div>
+
+        <p>{{ current_portfolio.paragraph2 }}</p>
+
+        <div class="bug_line_cover bottom_bug_line_cover"></div>
+    </div>
     <p id="third-parag" class="appear">{{ current_portfolio.paragraph3 }}</p>
   </section>
 

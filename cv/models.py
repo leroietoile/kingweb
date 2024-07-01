@@ -2,13 +2,20 @@ from django.db import models
 from django.urls import reverse
 
 
-class Profil(models.Model):
+class Profile(models.Model):
     firstname = models.CharField(max_length=200)
     surname = models.CharField(max_length=200)
     picture = models.ImageField(upload_to='pictures', blank=True, null=True)
     profession = models.CharField(max_length=300, blank=True)
     age = models.IntegerField(default=0)
     email = models.CharField(max_length=200, blank=True)
+    facebook = models.CharField(max_length=200, blank=True, default="")
+    tiktok = models.CharField(max_length=200, blank=True, default="")
+    reddit = models.CharField(max_length=200, blank=True, default="")
+    discord = models.CharField(max_length=200, blank=True, default="")
+    telegram = models.CharField(max_length=200, blank=True, default="")
+    instagram = models.CharField(max_length=200, blank=True, default="")
+    twitter = models.CharField(max_length=200, blank=True, default="")
     phone_number = models.CharField(max_length=200, blank=True)
     english_profil = models.BooleanField(default=True)
 
@@ -18,6 +25,7 @@ class Profil(models.Model):
 
 class Section(models.Model):
     title = models.CharField(max_length=200)
+    recollect_key = models.CharField(max_length=200, default='none')
 
     def __str__(self):
         return self.title
