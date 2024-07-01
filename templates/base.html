@@ -2,24 +2,70 @@
 <html lang="en">
 <head>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script> 
+    <script src="{% static 'cv/scrollreveal.min.js' %}"></script>
+
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <link rel="stylesheet" href="{% static 'cv/style.css' %}">
     <title>King Kakatsi</title>
 </head>
 <body>
 
-    <nav id="my-bar">
-        <!-- <li class="name-as-logo">King Kakatsi</li> -->
-        <li><a href="{% url 'index' %}">Home</a></li>
-        <li><a href="{% url 'index' %}#portfolio">Portfolio</a></li>
-        <li><a href="tel:+233535610908">Call me</a></li>
-        <li><a href="{% url 'index' %}#formulaire" id="contact-nav-link">Message</a></li>
+    <!-- ............................. NAV BAR ................................. -->
+    <nav id="my-bar" class="my-bar navbar-on-laptop">
+        <ul class="my-bar-ul">
+            <li><a href="{% url 'index' %}">Home</a></li>
+            <li><a href="{% url 'index' %}#services">Services</a></li>
+            <li><a href="{% url 'index' %}#portfolio">Portfolio</a></li>
+            <li><a href="tel:+233535610908">Call me</a></li>
+            <li><a href="{% url 'index' %}#formulaire" id="contact-nav-link" class="contact-nav-link">Message</a></li>
+        </ul>
+    </nav>
+    
+    <nav class="my-bar navbar-on-phone">
+        <ul class="my-bar-ul">
+            <li><button onclick="slideInOutMenu()"><img class="nav-menu-logo" src="{% static 'cv/images/black_menu_i.png' %}" alt=""></button></li>
+            <li><a href="{% url 'index' %}#formulaire" id="contact-nav-link" class="contact-nav-link">Message</a></li>
+
+        </ul>
+
+        <ul class="menu-box my-bar-ul" style="top: -500%;">
+            <li><a href="{% url 'index' %}" onclick="menuDesappear('1s')">Home</a></li>
+
+            <li><a href="{% url 'index' %}#services" onclick="menuDesappear('1s')">Services</a></li>
+
+            <li><a href="{% url 'index' %}#portfolio" onclick="menuDesappear('1s')">Portfolio</a></li>
+
+            <li><a href="tel:+233535610908" onclick="menuDesappear('1s')">Call me</a></li>
+        </ul>
+
+        <div class="dark-cover" style="top: -500%; opacity: 0;"></div>
     </nav>
 
-    <div class="floating_button_div">
+    <div class="floating-menu-btn-container" style="left: -100%;">
+        <button onclick="floatingMenuBtnAppear()"><img src="{% static 'cv/images/white_menu_i.png' %}" alt="" class="floating-menu-btn-icon"></button>
+    </div>
+
+    <div class="floating-menu-container" style="left: -100%">
+        <ul class="floating-menu-ul">
+            <li><a href="{% url 'index' %}"><img class="floating-menu-icons" src="{% static 'cv/images/white_home_i.png' %}" alt=""></a></li>
+            
+            <li><a href="{% url 'index' %}#services"><img class="floating-menu-icons" src="{% static 'cv/images/white_service_i.png' %}" alt=""></a></li>
+
+            <li><a href="{% url 'index' %}#portfolio"><img class="floating-menu-icons" src="{% static 'cv/images/white_portfolio_i.png' %}" alt=""></a></li>
+
+            <li><a href="tel:+233535610908"><img class="floating-menu-icons" src="{% static 'cv/images/white_call_i.png' %}" alt=""></a></li>
+            
+            <li><a href="{% url 'index' %}#formulaire"><img class="floating-menu-icons" src="{% static 'cv/images/white_message_i.png' %}" alt=""></a></li>
+        </ul>
+    </div>
+
+
+    <div class="floating_button_div" style="right: -100%;">
         <a href="https://wa.me/233535610908"><img src="{% static 'cv/images/logo_wathsapp.png' %}" alt=""></a>
     </div>
 
@@ -27,25 +73,171 @@
 
     {% endblock %}
 
-    <footer>
-        <div class="social_info">
-            <div class="social_icone appear">
-                <a href="https://www.facebook.com/leroibeaudoigts.KAKATSI" target="_blank"><img src="{% static 'cv/images/logo_fb.png' %}" alt=""></a>
+    <footer class="my-footer">
+        <div class="h2_container my-skills-h2"><h2>MY SKILLS</h2></div>
+        <div class="my-skills">
 
-                <a href="https://t.me/kingiscoding" target="_blank"><img src="{% static 'cv/images/logo_telegram.png' %}" alt=""></a>
+            {% for section in sections %}
+            {% if section.recollect_key == "skills" %}
+            <h3 class="cat-title">{{ section.title.upper }}</h3>
+            <div class="skills-category">
+                
+                {% for block in blocks %}
+                {% if block.section.title == section.title %}
+                <table class="skill intervalApparition">
 
-                <a href="mailto:leroietoile@gmail.com?subject=Offre%20de%20projet" target="_blank"><img src="{% static 'cv/images/logo_mail2.png' %}" alt=""></a>
+                    <tr class="skill-icon-tr">
+                        <td class="skill-icon-td">
+                            {% if block.picture %}
+                            <img src="{{ block.picture }}" alt="">
+                            {% else %}
+                            <img src="{% static 'cv/images/image.jpg' %}" alt="">
+                            {% endif %}
+                        </td>
+                    </tr>
+
+                    <tr class="skill-text-tr">
+                        <td class="skill-text-td">
+                            <div class="skill-text-div">
+                                <h3>{{ block.title }}</h3>
+                                <p></p>
+                            </div>
+                        </td>
+                    </tr>
+
+                </table>
+                {% endif %}
+                {% endfor %}
+
             </div>
-            <p id="social">My social media</p>
-            <p id="copyright">copyright © 2023</p>
+            {% endif %}
+            {% endfor %}
         </div>
-        <img src="{% static 'cv/images/foot_pic3.png' %}" alt="" id="foot_pic">       
+
+        <div class="footer">
+
+            <div class="footer-left-block">
+                <h2>Let me code your ambitions</h2>
+                <p>Every project deserves dedicated attention and custom development. Together, we push the boundaries of what's possible.</p>
+
+                <div class="social-media-div appear">
+                    {% if my_profile.facebook %}
+                    <a href="{{ my_profile.facebook }}" target="_blank"><img src="{% static 'cv/images/facebook.png' %}" alt=""></a>
+                    {% endif %}
+
+                    {% if my_profile.instagram %}
+                    <a href="{{ my_profile.instagram }}" target="_blank"><img src="{% static 'cv/images/instagram.png' %}" alt=""></a>
+                    {% endif %}
+                    
+                    {% if my_profile.telegram %}
+                    <a href="{{ my_profile.telegram }}" target="_blank"><img src="{% static 'cv/images/logo_telegram.png' %}" alt=""></a>
+                    {% endif %}
+                    
+                    {% if my_profile.reddit %}
+                    <a href="{{ my_profile.reddit }}" target="_blank"><img src="{% static 'cv/images/reddit.png' %}" alt=""></a>
+                    {% endif %}
+                    
+                    {% if my_profile.email %}
+                    <a href="mailto:{{ my_profile.email }}?subject=Offre%20de%20projet" target="_blank"><img src="{% static 'cv/images/email.png' %}" alt=""></a>
+                    {% endif %}
+
+                    {% if my_profile.twitter %}
+                    <a href="{{ my_profile.twitter }}" target="_blank"><img src="{% static 'cv/images/x.png' %}" alt=""></a>
+                    {% endif %}
+
+                </div>
+
+                
+                <p class="copyright">copyright © 2023</p>
+            </div>
+
+            <div class="footer-right-block">
+                {% if f_profile_img != "no image" %}
+                <img src="{{ f_profile_img }}" alt="">
+                {% else %}
+                <img src="{% static 'cv/images/image.jpg' %}" alt="">
+                {% endif %}
+                
+                {% if f_initials_img != "no image" %}
+                <img src="{{ f_initials_img }}" alt="">
+                {% else %}
+                <img src="{% static 'cv/images/image.jpg' %}" alt="">
+                {% endif %}
+            </div>
+
+        </div>
+        <div class="footer-bottom-design-div-parent">
+            <div class="footer-bottom-design-div-child"></div>
+        </div>
     </footer>
 
 
-    <script src="{% static 'cv/scrollreveal.min.js' %}"></script>
+
 
     <script>
+        const navBar = document.querySelector(".my-bar");
+        const floatingMenuBtn = document.querySelector('.floating-menu-btn-container');
+        const floatingWhatappBtn = document.querySelector('.floating_button_div');
+        const floatingMenuBox = document.querySelector('.floating-menu-container');
+        const navMenuBtnIcon = document.querySelector('.nav-menu-logo');
+        const floatingMenuBtnIcon = document.querySelector('.floating-menu-btn-icon');
+        const menuBox = document.querySelector('.menu-box');
+        const darkCover = document.querySelector('.dark-cover');
+
+        window.addEventListener('scroll', ()=>{
+            if(window.scrollY > 700) {
+                floatingMenuBtn.style.left = '0';
+                floatingWhatappBtn.style.right = '3%';
+            }
+            else {
+                floatingMenuBtn.style.left = '-100%';
+                floatingWhatappBtn.style.right = '-100%';
+                floatingMenuBox.style.left = '-100%';
+            }   
+        });
+
+        // +++++++++ MENU BURBER APPEAR ++++++++
+
+        function menuDesappear(duration) {
+            navMenuBtnIcon.src = "{% static 'cv/images/black_menu_i.png' %}";
+            darkCover.style.transitionDuration = duration;
+            darkCover.style.height = '100%';
+            darkCover.style.top = "-500%";
+            darkCover.style.opacity = 0;
+            menuBox.style.top = "-500%";
+        }
+        
+        function slideInOutMenu() {
+            if(menuBox.style.top != "100%") {
+                navMenuBtnIcon.src = "{% static 'cv/images/black_close_i.png' %}";
+                menuBox.style.top = "100%"; 
+                darkCover.style.height = 2 * window.innerHeight;
+                darkCover.style.top = "100%"
+                
+                setTimeout(()=>{
+                    darkCover.style.transitionDuration = ".5s"
+                    darkCover.style.opacity = 1;
+                }, 200);
+            }
+            else{
+                menuDesappear('.1s');
+            }
+        }
+
+        // ++++++++ FLOATING MENU APPEARS +++++++++
+        function floatingMenuBtnAppear() {
+
+            if(floatingMenuBox.style.left == "0px") {
+                floatingMenuBtnIcon.src = "{% static 'cv/images/white_menu_i.png' %}";
+                floatingMenuBox.style.left = "-100%";
+            }
+            else {
+                floatingMenuBtnIcon.src = "{% static 'cv/images/white_close_i.png' %}";
+                floatingMenuBox.style.left = "0";
+            }
+        }
+
+
 
         // ..........% GET VISITOR MSG %..............
         const v_name = document.getElementById('name');
@@ -72,7 +264,10 @@
                 
                 success: function(json){
                     response = json['response_msg'];
-                    alert(response);
+                    if(response != null) {
+                        alert(response);
+                    }
+
                     if(response == 'Message sent successfully.'){
                         v_name.value = '';
                         v_mail.value = '';
@@ -96,48 +291,56 @@
             reset: true,
         });
 
+        sr.reveal(".intervalApparition", {
+            interval: 200,
+            origin: "bottom",
+            opacity: 0,
+            distance: "25px",
+            scale: .95,
+        });
+
         sr.reveal(".profil_text", {
             origin: "left",
             distance: "100px",
             opacity: .7,
             scale: .8,
-        })
+        });
 
         sr.reveal(".profil_img_container", {
             origin: "right",
             distance: "70px",
             opacity: 1,
-        })
+        });
 
         sr.reveal(".appear", {
             distance: "25px",
             scale: .95,
-        })
+        });
 
         sr.reveal(".slide_from_right", {
             origin: 'right',
             distance: "100px",
             scale: .9,
-        })
+        });
 
         sr.reveal(".slide_from_top", {
             origin: 'top',
             distance: "100px",
             scale: .9,
-        })
+        });
 
         sr.reveal(".slide_from_bottom", {
             origin: 'bottom',
             distance: "100px",
             scale: .9,
-        })
+        });
 
         sr.reveal(".slide_from_left", {
             origin: 'left',
             distance: "100px",
             scale: .95,
             opacity: .95,
-        })
+        });
 
     </script>
 
